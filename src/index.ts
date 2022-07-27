@@ -1,11 +1,17 @@
 import express from 'express';
 
+import database from './database';
+import routes from './routes';
+import env from './env';
+
 const app = express();
 
-app.get("/", (req, res) => {
-    return res.send('Hello World!');
-})
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.listen(3000, () => {
-    console.log('Server started on port 3000');
+routes(app);
+
+app.listen(env.SERVER_PORT, () => {
+  database.initialize();
+  console.log(`Server started on port ${env.SERVER_PORT}!\nLast Update on: ` + new Date());
 })
