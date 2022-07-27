@@ -1,4 +1,5 @@
 import { Express } from "express"
+import env from './env';
 
 const routes = (app: Express) => {
   app.get("/", (_, res) => {
@@ -6,7 +7,7 @@ const routes = (app: Express) => {
   })
 
   app.get("/test", (_, res) => {
-    res.send(process.env.SERVER_PORT);
+    res.send(env.DATABASE_HOST);
   })
 }
 
