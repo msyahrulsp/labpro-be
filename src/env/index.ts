@@ -8,4 +8,5 @@ export default {
   DATABASE_HOST: process.env.DATABASE_HOST,
   DATABASE_PORT: process.env.DATABASE_PORT,
   DATABASE_NAME: process.env.DATABASE_NAME,
+  JWT_SECRET: process.env.JWT_SECRET
 }
