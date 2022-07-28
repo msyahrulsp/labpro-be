@@ -1,6 +1,6 @@
 import express from 'express';
 
-import database from './database';
+import { database } from './database';
 import routes from './routes';
 import env from './env';
 
