@@ -1,10 +1,15 @@
 import { Express } from "express"
 import { getUser } from "./controllers/UserController";
+import { getVerif } from "./controllers/VerifikasiAkunController";
 import env from './env';
 
 const routes = (app: Express) => {
   app.get("/", async (_, res) => {
     res.send(await getUser());
+  })
+
+  app.get("/user", async (_, res) => {
+    res.send(await getVerif());
   })
 
   app.get("/test", (_, res) => {

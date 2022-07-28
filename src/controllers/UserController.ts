@@ -1,5 +1,5 @@
 import { User } from "../models/User";
-import database from '../database';
+import { database } from '../database';
 
 const repo = database.getRepository(User);
 
