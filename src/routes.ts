@@ -1,9 +1,10 @@
 import { Express } from "express"
+import { getUser } from "./controllers/UserController";
 import env from './env';
 
 const routes = (app: Express) => {
-  app.get("/", (_, res) => {
-    res.send("Server is running!");
+  app.get("/", async (_, res) => {
+    res.send(await getUser());
   })
 
   app.get("/test", (_, res) => {
