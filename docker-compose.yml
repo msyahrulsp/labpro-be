@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+    image: labpro-be
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
+    env_file:
+      - src/.env
+    depends_on:
+      - database
+    networks:
+      - app-tier
+
+  database:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 13306:3306
+    volumes:
+      - ./src/seed:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: "<Insert Password>"
+      MYSQL_INITDB_SKIP_TZINFO: 1
+    container_name: labpro-mysql
+    networks:
+      - app-tier
+
+networks:
+  app-tier:
+    driver: bridge
