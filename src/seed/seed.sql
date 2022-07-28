@@ -3,21 +3,25 @@ CREATE DATABASE `bnmo`;
 DROP TABLE IF EXISTS `bnmo`.`user`;
 CREATE TABLE `bnmo`.`user` (
   `id_user` int(11) NOT NULL AUTO_INCREMENT,
-  `nama` varchar(25) NOT NULL,
-  `role` varchar(8) NOT NULL,
+  `nama` varchar(100) NOT NULL,
+  `role` varchar(10) NOT NULL,
   `username` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `ktp` varchar(1000) DEFAULT NULL,
+  `password` char(255) NOT NULL,
+  `ktp` varchar(100) DEFAULT NULL,
   `norek` varchar(50) DEFAULT NULL,
   `saldo` int(11) DEFAULT NULL,
   `created_at` date DEFAULT NULL,
-  `statusAkun` tinyint(1) DEFAULT NULL,
+  `status_akun` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id_user`)
 );
-INSERT INTO `bnmo`.`user`
-  VALUES (1,'Admin','admin','admin','admin',NULL,NULL,NULL,'2022-07-28',NULL),
-  (2,'Budi','customer','customer','customer',NULL,'12345678',1000000,'2022-07-28',1),
-  (3,'M Syahrul SP','customer','13520161','13520161',NULL,'87654321',1000000,'2022-07-28',1);
+
+INSERT INTO `bnmo`.`user` (`nama`, `username`, `password`, `role`, `created_at`)
+  VALUES (12345,"admin",'admin','admin','2022-07-28');
+
+INSERT INTO `bnmo`.`user` (`nama`, `role`, `username`, `password`, `norek`, `saldo`, `created_at`, `status_akun`)
+  VALUES
+    ("Bimo",'customer','customer','customer','12345678',1000000,'2022-07-28',1),
+    ("M Syahrul SP","customer",'13520161','13520161','87654321',1000000,'2022-07-28',0);
 
 DROP TABLE IF EXISTS `bnmo`.`history`;
 CREATE TABLE `bnmo`.`history` (
@@ -28,30 +32,46 @@ CREATE TABLE `bnmo`.`history` (
   `nominal` int(11) NOT NULL,
   `currency` varchar(5) NOT NULL,
   `created_at` date NOT NULL,
-  `status` tinyint(1) NOT NULL,
+  `status` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id_history`),
   KEY `id_user` (`id_user`),
   CONSTRAINT `history_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`)
 );
 
+INSERT INTO `bnmo`.`history` (`id_user`, `tipe_transaksi`, `tipe_util`, `nominal`, `currency`, `created_at`, `status`)
+  VALUES
+    (2, 'request', 'penarikan', 200000, 'USD', '2022-07-28', 'success');
+
 DROP TABLE IF EXISTS `bnmo`.`verifikasi_akun`;
 CREATE TABLE `bnmo`.`verifikasi_akun` (
-  `id_verifikasi_history` int(11) NOT NULL AUTO_INCREMENT,
+  `id_verifikasi_akun` int(11) NOT NULL AUTO_INCREMENT,
   `id_user` int(11) NOT NULL,
   `created_at` date NOT NULL,
-  `status` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id_verifikasi_history`),
+  PRIMARY KEY (`id_verifikasi_akun`),
   KEY `id_user` (`id_user`),
   CONSTRAINT `verifikasi_akun_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`)
 );
+
+INSERT INTO `bnmo`.`verifikasi_akun` (`id_user`, `created_at`)
+  VALUES
+    (1, '2022-07-28');
 
 DROP TABLE IF EXISTS `bnmo`.`verifikasi_request`;
 CREATE TABLE `bnmo`.`verifikasi_request` (
   `id_verifikasi_request` int(11) NOT NULL AUTO_INCREMENT,
   `id_user` int(11) NOT NULL,
+  `nominal` int NOT NULL,
+  `tipe` varchar(10) NOT NULL,
+  `currency` VARCHAR(5),
   `created_at` date NOT NULL,
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id_verifikasi_request`),
   KEY `id_user` (`id_user`),
   CONSTRAINT `verifikasi_request_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`)
 );
+
+INSERT INTO `bnmo`.`verifikasi_request` (`id_user`, `nominal`, `tipe`, `currency`, `created_at`, `status`)
+  VALUES (2, 1000000, 'penarikan', 'IDR', '2022-07-28', 0),
+  (2, 1000000, 'penambahan', 'IDR', '2022-07-28', 0);
+
+SELECT * FROM `bnmo`.`user`;
