@@ -40,7 +40,9 @@ CREATE TABLE `bnmo`.`history` (
 
 INSERT INTO `bnmo`.`history` (`id_user`, `tipe_transaksi`, `tipe_util`, `nominal`, `currency`, `created_at`, `status`)
   VALUES
-    (2, 'request', 'penarikan', 200000, 'USD', '2022-07-28', 'success');
+    (2, 'request', 'penarikan', 200000, 'USD', '2022-07-28', 'success'),
+    (2, 'request', 'pengurangan', 200000, 'USD', '2022-07-28', 'pending'),
+    (2, 'transfer', '20ASDsa', 200000, 'IDR', '2022-07-28', 'pending');
 
 DROP TABLE IF EXISTS `bnmo`.`verifikasi_akun`;
 CREATE TABLE `bnmo`.`verifikasi_akun` (
@@ -55,21 +57,3 @@ CREATE TABLE `bnmo`.`verifikasi_akun` (
 INSERT INTO `bnmo`.`verifikasi_akun` (`id_user`, `created_at`)
   VALUES
     (3, '2022-07-28');
-
-DROP TABLE IF EXISTS `bnmo`.`verifikasi_request`;
-CREATE TABLE `bnmo`.`verifikasi_request` (
-  `id_verifikasi_request` int(11) NOT NULL AUTO_INCREMENT,
-  `id_user` int(11) NOT NULL,
-  `nominal` int NOT NULL,
-  `tipe` varchar(10) NOT NULL,
-  `currency` VARCHAR(5),
-  `created_at` date NOT NULL,
-  `status` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id_verifikasi_request`),
-  KEY `id_user` (`id_user`),
-  CONSTRAINT `verifikasi_request_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`)
-);
-
-INSERT INTO `bnmo`.`verifikasi_request` (`id_user`, `nominal`, `tipe`, `currency`, `created_at`, `status`)
-  VALUES (2, 1000000, 'penarikan', 'IDR', '2022-07-28', 0),
-  (2, 1000000, 'penambahan', 'IDR', '2022-07-28', 0);
