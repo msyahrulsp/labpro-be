@@ -54,7 +54,7 @@ CREATE TABLE `bnmo`.`verifikasi_akun` (
 
 INSERT INTO `bnmo`.`verifikasi_akun` (`id_user`, `created_at`)
   VALUES
-    (1, '2022-07-28');
+    (3, '2022-07-28');
 
 DROP TABLE IF EXISTS `bnmo`.`verifikasi_request`;
 CREATE TABLE `bnmo`.`verifikasi_request` (
@@ -73,5 +73,3 @@ CREATE TABLE `bnmo`.`verifikasi_request` (
 INSERT INTO `bnmo`.`verifikasi_request` (`id_user`, `nominal`, `tipe`, `currency`, `created_at`, `status`)
   VALUES (2, 1000000, 'penarikan', 'IDR', '2022-07-28', 0),
   (2, 1000000, 'penambahan', 'IDR', '2022-07-28', 0);
-
-SELECT * FROM `bnmo`.`user`;

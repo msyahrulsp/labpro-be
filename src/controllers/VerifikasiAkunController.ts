@@ -1,16 +1,18 @@
-import { VerifikasiAkun } from "../models/VerifikasiAkun";
+import { VerifikasiAkun } from '../models/VerifikasiAkun';
 import { database } from '../database';
+import { RequestHandler } from 'express';
 
 const repo = database.getRepository(VerifikasiAkun);
 
-export const getVerif = async () => {
+export const getVerif: RequestHandler = async (_, res) => {
   try {
-    const users = await repo.find({
+    const verif = await repo.find({
       relations: ['user']
     });
-    return users;
+    res.status(200).json(verif)
   } catch (err) {
-    console.log(err)
-    return [];
+    res.status(400).send({
+      message: err,
+    })
   }
 }
