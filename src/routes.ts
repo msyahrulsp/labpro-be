@@ -1,20 +1,15 @@
-import { Express } from "express"
-import { getUser } from "./controllers/UserController";
-import { getVerif } from "./controllers/VerifikasiAkunController";
-import env from './env';
+import { Express } from 'express'
+import { getUser } from './controllers/UserController';
+import { getVerif } from './controllers/VerifikasiAkunController';
 
 const routes = (app: Express) => {
-  app.get("/", async (_, res) => {
-    res.send(await getUser());
+  app.route('/').get((_, res) => {
+    res.status(200).json({
+      message: 'API is Working',
+    })
   })
-
-  app.get("/user", async (_, res) => {
-    res.send(await getVerif());
-  })
-
-  app.get("/test", (_, res) => {
-    res.send(env.DATABASE_HOST);
-  })
+  app.route('/user').get(getUser);
+  app.route('/verifikasi').get(getVerif);
 }
 
 export default routes;
