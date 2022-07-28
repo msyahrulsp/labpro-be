@@ -2,25 +2,28 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn
+  CreateDateColumn,
+  BaseEntity,
+  OneToOne
 } from 'typeorm';
+import { VerifikasiAkun } from './VerifikasiAkun';
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id_user: number;
+
+  @Column()
+  nama: string;
+  
+  @Column()
+  role: string;
 
   @Column()
   username: string;
 
   @Column()
   password: string;
-
-  @Column()
-  nama: string;
-
-  @Column()
-  role: string;
 
   @Column({ nullable: true })
   ktp: string;
@@ -31,9 +34,15 @@ export class User {
   @Column({ nullable: true })
   saldo: number;
 
-  @CreateDateColumn()
-  date: Date;
+  @CreateDateColumn({ nullable: true })
+  created_at: Date;
 
-  @Column()
-  status: boolean;
+  @Column({ nullable: true })
+  status_akun: boolean;
+
+  @OneToOne(
+    () => VerifikasiAkun,
+    verifikasi_akun => verifikasi_akun.user
+  )
+  verifikasi_akuns: VerifikasiAkun;
 }
