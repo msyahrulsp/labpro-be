@@ -35,6 +35,11 @@ export const isAdmin = (auth: string | undefined) => {
   return role === 'admin';
 }
 
+export const isCustomer = (auth: string | undefined) => {
+  const role = getRoleFromToken(auth);
+  return role === 'customer';
+}
+
 export const isLogged = (auth: string | undefined) => {
   const role = getRoleFromToken(auth);
   return (role === 'customer') || (role === 'admin');

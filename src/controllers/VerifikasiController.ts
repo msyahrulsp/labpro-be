@@ -5,7 +5,7 @@ import { RequestHandler } from 'express';
 import { IResponse } from '../interfaces/IResponse';
 import { IVerifikasiAkun } from '../interfaces/IVerifikasiAkun';
 import { IHistory } from '../interfaces/IHistory';
-import { isAdmin } from '../middlewares/Token';
+import { getUsernameFromToken, isAdmin, isCustomer } from '../middlewares/Token';
 import { User } from '../models/User';
 import { IDRRate } from '../middlewares/Currency';
 
@@ -103,6 +103,71 @@ export const getVerifRequest: RequestHandler = async (req, res) => {
   }
 }
 
+export const postVerifRequest: RequestHandler = async (req, res) => {
+  const { username, tipe_request, currency, nominal } = req.body;
+  const user = getUsernameFromToken(req.headers.authorization);
+  if (!isCustomer(req.headers.authorization)) {
+    res.status(401).json({
+      message: 'You must be logged in as customer'
+    })
+    return;
+  }
+  if (user != username) {
+    res.status(401).json({
+      message: 'You are not authorized to post this'
+    })
+    return;
+  }
+  try {
+    const usr = await userRepo.findOne({
+      where: {
+        username
+      }
+    })
+    if (!usr) {
+      res.status(404).json({
+        message: 'Specified user not found'
+      })
+      return;
+    }
+    const rate = await IDRRate(currency);
+    if (rate === null) {
+      res.status(500).json({
+        message: 'Failed to get exchange rate'
+      })
+      return;
+    }
+    const newNominal = nominal * rate;
+    if (tipe_request === 'pengurangan') {
+      if (usr.saldo < newNominal) {
+        res.status(400).json({
+          message: 'Insufficient balance'
+        })
+        return;
+      }
+      usr.saldo -= newNominal;
+    }
+    const newHistory = new History();
+    newHistory.user = usr;
+    newHistory.tipe_transaksi = 'request';
+    newHistory.tipe_util = tipe_request;
+    newHistory.currency = currency;
+    newHistory.nominal = nominal;
+    newHistory.created_at = new Date();
+    newHistory.status = 'pending';
+
+    await userRepo.save(usr);
+    await verifRequestRepo.save(newHistory);
+    res.json({
+      message: 'SUCCESS'
+    })
+  } catch (err: any) {
+    res.status(500).json({
+      message: err.message,
+    })
+  }
+}
+
 export const putVerifRequest: RequestHandler = async (req, res) => {
   const { id , isAccepted } = req.body;
   if (!isAdmin(req.headers.authorization)) {
@@ -124,31 +189,28 @@ export const putVerifRequest: RequestHandler = async (req, res) => {
       })
       return;
     }
+    const curUser = verifRequest.user;
+    const rate = await IDRRate(verifRequest.currency);
+    if (rate === null) {
+      res.status(500).json({
+        message: "Failed to get exchange rate",
+      })
+      return;
+    }
+    const newNominal = rate * verifRequest.nominal;
     if (isAccepted) {
-      const curUser = verifRequest.user;
-      const rate = await IDRRate(verifRequest.currency);
-      if (rate === null) {
-        res.status(500).json({
-          message: "Failed to get exchange rate",
-        })
-        return;
-      }
-      const newNominal = rate * verifRequest.nominal;
       if (verifRequest.tipe_util === 'penambahan') {
         curUser.saldo += newNominal;
-      } else {
-        curUser.saldo -= newNominal;
-        // Asumsi kalau narik uang lebih besar dari
-        // saldo, otomatis uang yang ketarik semua
-        if (curUser.saldo < 0) curUser.saldo = 0; 
       }
       verifRequest.status = 'accepted';
-      await userRepo.save(curUser);
-      await verifRequestRepo.save(verifRequest);
     } else {
       verifRequest.status = 'rejected';
-      await verifRequestRepo.save(verifRequest);
+      if (verifRequest.tipe_util === 'pengurangan') {
+        curUser.saldo += newNominal
+      }
     }
+    await userRepo.save(curUser);
+    await verifRequestRepo.save(verifRequest);
     res.json({
       message: "SUCCESS"
     })
