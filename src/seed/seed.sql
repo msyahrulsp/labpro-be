@@ -11,12 +11,12 @@ CREATE TABLE `bnmo`.`user` (
   `norek` varchar(50) DEFAULT NULL,
   `saldo` int(11) DEFAULT NULL,
   `created_at` date DEFAULT NULL,
-  `status_akun` tinyint(1) DEFAULT NULL,
+  `status_akun` tinyint(1) NOT NULL,
   PRIMARY KEY (`id_user`)
 );
 
-INSERT INTO `bnmo`.`user` (`nama`, `username`, `password`, `role`, `created_at`)
-  VALUES (12345,'admin','$2a$10$yxbCU4qZ2g0CX/uRKDvxkuoExx6UQjKf0zDjlDzZAd.IHR6BaBqZy','admin','2022-07-28');
+INSERT INTO `bnmo`.`user` (`nama`, `username`, `password`, `role`, `created_at`, `status_akun`)
+  VALUES (12345,'admin','$2a$10$yxbCU4qZ2g0CX/uRKDvxkuoExx6UQjKf0zDjlDzZAd.IHR6BaBqZy','admin','2022-07-28', 1);
 
 INSERT INTO `bnmo`.`user` (`nama`, `role`, `username`, `password`, `norek`, `saldo`, `created_at`, `status_akun`)
   VALUES
