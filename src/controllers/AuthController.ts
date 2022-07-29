@@ -9,7 +9,6 @@ const userRepo = database.getRepository(User);
 const verifRepo = database.getRepository(VerifikasiAkun);
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const tokenExpired = 1 * 60 * 60;
 
 export const loginHandler: RequestHandler = async (req, res) => {
   const { username, password } = req.body;
@@ -31,13 +30,10 @@ export const loginHandler: RequestHandler = async (req, res) => {
       })
       return;
     }
-    const data = {
-      token: jwt.sign({ user }, env.JWT_SECRET),
-      expired: new Date().getTime() + tokenExpired * 1000
-    }
+    const token = jwt.sign({ user }, env.JWT_SECRET)
     const payload: IResponse<string> = {
       message: 'SUCCESS',
-      data: btoa(JSON.stringify(data))
+      data: token
     }
     res.json(payload);
   } catch (err: any) {
