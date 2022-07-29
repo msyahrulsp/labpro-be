@@ -15,7 +15,7 @@ export class VerifikasiAkun {
   @OneToOne(
     () => User,
     user => user.id_user,
-    { cascade: true}
+    { cascade: true }
   )
   @JoinColumn({ name: 'id_user' })
   user: User;

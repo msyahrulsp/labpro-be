@@ -1,5 +1,5 @@
 import { Express } from 'express'
-import { getVerifAkun, getVerifRequest, getVerifRequestbyType } from './controllers/VerifikasiController';
+import { getVerifAkun, getVerifRequest, putVerifAkun, putVerifRequest } from './controllers/VerifikasiController';
 import { loginHandler, registerHandler } from './controllers/AuthController';
 import { getUser } from './controllers/UserController';
 import { getSelfHistory } from './controllers/HistoryController';
@@ -16,11 +16,10 @@ const routes = (app: Express) => {
   app.route('/register').post(registerHandler);
   // TODO Belum di test
   app.route('/transfer').post(transferHandler);
-  // TODO belum di implement
   app.route('/verification/accounts').get(getVerifAkun);
+  app.route('/verification/accounts').put(putVerifAkun);
   app.route('/verification/requests').get(getVerifRequest);
-  app.route('/verification/requests/:tipe').get(getVerifRequestbyType);
-  //
+  app.route('/verification/requests').put(putVerifRequest);
   app.route('/history/:username').get(getSelfHistory);
   app.route('/users').get(getUser);
   app.route('*').get((_, res) => {

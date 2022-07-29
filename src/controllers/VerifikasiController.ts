@@ -5,13 +5,24 @@ import { RequestHandler } from 'express';
 import { IResponse } from '../interfaces/IResponse';
 import { IVerifikasiAkun } from '../interfaces/IVerifikasiAkun';
 import { IHistory } from '../interfaces/IHistory';
+import { isAdmin } from '../middlewares/Token';
+import { User } from '../models/User';
 
 const verifAkunRepo = database.getRepository(VerifikasiAkun);
 const verifRequestRepo = database.getRepository(History);
+const userRepo = database.getRepository(User);
 
-export const getVerifAkun: RequestHandler = async (_, res) => {
+export const getVerifAkun: RequestHandler = async (req, res) => {
+  if (!isAdmin(req.headers.authorization)) {
+    res.status(403).json({
+      message: 'You are not authorized to access this resource'
+    })
+    return;
+  }
   try {
-    const verifAkun = await verifAkunRepo.find();
+    const verifAkun = await verifAkunRepo.find({
+      relations: ['user']
+    });
     const payload: IResponse<IVerifikasiAkun[]> = {
       message: 'SUCCESS',
       data: verifAkun,
@@ -24,9 +35,67 @@ export const getVerifAkun: RequestHandler = async (_, res) => {
   }
 }
 
-export const getVerifRequest: RequestHandler = async (_, res) => {
+export const putVerifAkun: RequestHandler = async (req, res) => {
+  const { username, isAccepted } = req.body;
+  if (!isAdmin(req.headers.authorization)) {
+    res.status(403).json({
+      message: 'You are not authorized to access this resource'
+    })
+    return;
+  }
   try {
-    const verifRequest = await verifRequestRepo.find();
+    const verifAkun = await verifAkunRepo.findOne({
+      relations: ['user'],
+      where: {
+        user: {
+          username
+        }
+      }
+    })
+    if (!verifAkun) {
+      res.status(404).json({
+        message: 'Specified user not found'
+      })
+      return;
+    }
+    const curUser = verifAkun.user;
+    console.log(isAccepted);
+    if (isAccepted) {
+      console.log("SUCC")
+      curUser.status_akun = true;
+      await userRepo.save(curUser);
+      await verifAkunRepo.remove(verifAkun);
+      res.json({
+        message: 'SUCCESS'
+      })
+    } else {
+      console.log("DELETE")
+      await userRepo.remove(curUser);
+      res.json({
+        message: 'SUCCESS'
+      })
+    }
+  } catch (err: any) {
+    res.status(500).json({
+      message: err.message,
+    })
+  }
+}
+
+export const getVerifRequest: RequestHandler = async (req, res) => {
+  if (!isAdmin(req.headers.authorization)) {
+    res.status(403).json({
+      message: 'You are not authorized to access this resource'
+    })
+    return;
+  }
+  try {
+    const verifRequest = await verifRequestRepo.find({
+      relations: ['user'],
+      where: {
+        status: 'pending'
+      }
+    });
     const payload: IResponse<IHistory[]> = {
       message: 'SUCCESS',
       data: verifRequest,
@@ -39,22 +108,44 @@ export const getVerifRequest: RequestHandler = async (_, res) => {
   }
 }
 
-export const getVerifRequestbyType: RequestHandler = async (req, res) => {
-  const { tipe } = req.params;
+export const putVerifRequest: RequestHandler = async (req, res) => {
+  const { id , isAccepted } = req.body;
+  if (!isAdmin(req.headers.authorization)) {
+    res.status(403).json({
+      message: 'You are not authorized to access this resource'
+    })
+    return;
+  }
   try {
-    const verifRequest = await verifRequestRepo.find({
+    const verifRequest = await verifRequestRepo.findOne({
+      relations: ['user'],
       where: {
-        tipe_transaksi: tipe
+        id_history: id
       }
-    });
-    const payload: IResponse<IHistory[]> = {
-      message: 'SUCCESS',
-      data: verifRequest,
+    })
+    if (!verifRequest) {
+      res.status(404).json({
+        message: 'Specified request not found'
+      })
+      return;
     }
-    res.json(payload);
-  } catch (err: any) {
+    if (isAccepted) {
+      const curUser = verifRequest.user;
+      // panggil exchange
+      curUser.saldo += verifRequest.nominal;
+      verifRequest.status = 'accepted';
+      await userRepo.save(curUser);
+      await verifRequestRepo.save(verifRequest);
+    } else {
+      verifRequest.status = 'rejected';
+      await verifRequestRepo.save(verifRequest);
+    }
     res.json({
-      message: err.message
+      message: "SUCCESS"
+    })
+  } catch (err: any) {
+    res.status(500).json({
+      message: err.message,
     })
   }
 }
