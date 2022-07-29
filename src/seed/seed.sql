@@ -36,13 +36,14 @@ CREATE TABLE `bnmo`.`history` (
   PRIMARY KEY (`id_history`),
   KEY `id_user` (`id_user`),
   CONSTRAINT `history_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`)
+  ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 INSERT INTO `bnmo`.`history` (`id_user`, `tipe_transaksi`, `tipe_util`, `nominal`, `currency`, `created_at`, `status`)
   VALUES
-    (2, 'request', 'penarikan', 200000, 'USD', '2022-07-28', 'success'),
+    (2, 'request', 'penambahan', 200000, 'USD', '2022-07-28', 'accepted'),
     (2, 'request', 'pengurangan', 200000, 'USD', '2022-07-28', 'pending'),
-    (2, 'transfer', '20ASDsa', 200000, 'IDR', '2022-07-28', 'pending');
+    (2, 'transfer', 'penambahan', 200000, 'IDR', '2022-07-28', 'rejected');
 
 DROP TABLE IF EXISTS `bnmo`.`verifikasi_akun`;
 CREATE TABLE `bnmo`.`verifikasi_akun` (
@@ -52,6 +53,7 @@ CREATE TABLE `bnmo`.`verifikasi_akun` (
   PRIMARY KEY (`id_verifikasi_akun`),
   KEY `id_user` (`id_user`),
   CONSTRAINT `verifikasi_akun_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`)
+  ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 INSERT INTO `bnmo`.`verifikasi_akun` (`id_user`, `created_at`)
