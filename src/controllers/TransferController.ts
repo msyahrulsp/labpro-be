@@ -28,13 +28,18 @@ export const transferHandler: RequestHandler = async (req, res) => {
       })
       return;
     }
-    
+    if (!userDest.status_akun) {
+      res.json({
+        message: "User account is not verified",
+      })
+      return;
+    }
     const userSource = await userRepo.findOne({
       where: {
         username
       }
     })
-    if (!userSource) {
+    if (!userSource || !userSource.status_akun) {
       res.json({
         message: "No user found with this username",
       })
@@ -49,6 +54,7 @@ export const transferHandler: RequestHandler = async (req, res) => {
     newHistory.created_at = new Date();
     newHistory.status = 'success';
 
+    // panggil exchange
     userDest.saldo += nominal;
     userSource.saldo -= nominal;
     await userRepo.save(userDest);

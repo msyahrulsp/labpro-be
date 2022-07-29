@@ -14,7 +14,6 @@ const routes = (app: Express) => {
   })
   app.route('/login').post(loginHandler);
   app.route('/register').post(registerHandler);
-  // TODO Belum di test
   app.route('/transfer').post(transferHandler);
   app.route('/verification/accounts').get(getVerifAkun);
   app.route('/verification/accounts').put(putVerifAkun);
