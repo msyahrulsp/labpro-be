@@ -8,5 +8,7 @@ export default {
   DATABASE_HOST: process.env.DATABASE_HOST,
   DATABASE_PORT: process.env.DATABASE_PORT,
   DATABASE_NAME: process.env.DATABASE_NAME,
-  JWT_SECRET: process.env.JWT_SECRET
+  JWT_SECRET: process.env.JWT_SECRET,
+  EXCHANGE_RATE_API: process.env.EXCHANGE_RATE_API,
+  EXCHANGE_RATE_API_KEY: process.env.EXCHANGE_RATE_API_KEY,
 }

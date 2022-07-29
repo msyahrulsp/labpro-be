@@ -3,6 +3,8 @@ import { database } from "../database";
 import { User } from "../models/User";
 import { History } from "../models/History";
 import { getUsernameFromToken } from "../middlewares/Token";
+import { IDRRate } from "../middlewares/Currency";
+import { currencyList } from "../util/symbols";
 
 const userRepo = database.getRepository(User);
 const historyRepo = database.getRepository(History);
@@ -13,6 +15,12 @@ export const transferHandler: RequestHandler = async (req, res) => {
   if (user !== username) {
     res.status(400).json({
       message: "You must be logged in to transfer",
+    })
+    return;
+  }
+  if (!currencyList.includes(currency)) {
+    res.status(400).json({
+      message: "Invalid currency",
     })
     return;
   }
@@ -45,6 +53,30 @@ export const transferHandler: RequestHandler = async (req, res) => {
       })
       return;
     }
+    if (userSource.norek === userDest.norek) {
+      res.status(400).json({
+        message: "You cannot transfer to your own account",
+      })
+      return;
+    }
+
+    const rate = await IDRRate(currency);
+    if (rate === null) {
+      res.status(500).json({
+        message: "Failed to get exchange rate",
+      })
+      return;
+    } 
+    const newNominal = rate * nominal;
+    if (userSource.saldo < newNominal) {
+      res.status(400).json({
+        message: "Insufficient balance",
+      })
+      return;
+    }
+    userDest.saldo += newNominal;
+    userSource.saldo -= newNominal;
+
     const newHistory = new History();
     newHistory.user = userSource;
     newHistory.tipe_transaksi = 'transfer';
@@ -53,10 +85,6 @@ export const transferHandler: RequestHandler = async (req, res) => {
     newHistory.currency = currency;
     newHistory.created_at = new Date();
     newHistory.status = 'success';
-
-    // panggil exchange
-    userDest.saldo += nominal;
-    userSource.saldo -= nominal;
     await userRepo.save(userDest);
     await userRepo.save(userSource);
     await historyRepo.save(newHistory);

@@ -5,20 +5,28 @@ const jwt = require("jsonwebtoken");
 export const getRoleFromToken = (auth: string | undefined) => {
   if (!auth) return ""; 
   let role = "";
-  const token = auth?.split(' ')[1];
-  jwt.verify(token, env.JWT_SECRET, (err: any, user: any) => {
-    role = user.user.role ?? "";
-  })
+  try {
+    const token = auth?.split(' ')[1];
+    jwt.verify(token, env.JWT_SECRET, (err: any, res: any) => {
+      role = res.user.role ?? "";
+    })
+  } catch (err: any) {
+    console.log(err.message);
+  }
   return role;
 }
 
 export const getUsernameFromToken = (auth: string | undefined) => {
   if (!auth) return ""; 
   let username = ""
-  const token = auth?.split(' ')[1];
-  jwt.verify(token, env.JWT_SECRET, (err: any, user: any) => {
-    username = user.user.username ?? "";
-  })
+  try {
+    const token = auth?.split(' ')[1];
+    jwt.verify(token, env.JWT_SECRET, (err: any, res: any) => {
+      username = res.user.username ?? "";
+    })
+  } catch (err: any) {
+    console.log(err.message);
+  }
   return username;
 }
 
