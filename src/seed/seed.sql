@@ -16,12 +16,12 @@ CREATE TABLE `bnmo`.`user` (
 );
 
 INSERT INTO `bnmo`.`user` (`nama`, `username`, `password`, `role`, `created_at`)
-  VALUES (12345,"admin",'admin','admin','2022-07-28');
+  VALUES (12345,'admin','$2a$10$yxbCU4qZ2g0CX/uRKDvxkuoExx6UQjKf0zDjlDzZAd.IHR6BaBqZy','admin','2022-07-28');
 
 INSERT INTO `bnmo`.`user` (`nama`, `role`, `username`, `password`, `norek`, `saldo`, `created_at`, `status_akun`)
   VALUES
-    ("Bimo",'customer','customer','customer','12345678',1000000,'2022-07-28',1),
-    ("M Syahrul SP","customer",'13520161','13520161','87654321',1000000,'2022-07-28',0);
+    ('Bimo','customer','customer','$2a$10$cQIm5VpVrPgjXG6E8lTm3O0tzxOAvJhQRXLGcbDhg4U0daUIsClMu','12345678',1000000,'2022-07-28',1),
+    ('M Syahrul SP',"customer",'13520161','$2a$10$nprHYjJ9tmCvmW81jNCpSOr7tC/niA9p06gzjc/LNmsO.P7B9leYe','87654321',1000000,'2022-07-28',0);
 
 DROP TABLE IF EXISTS `bnmo`.`history`;
 CREATE TABLE `bnmo`.`history` (
