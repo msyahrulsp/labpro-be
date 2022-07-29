@@ -8,8 +8,7 @@ import { transferHandler } from './controllers/TransferController';
 const routes = (app: Express) => {
   app.route('/').get((_, res) => {
     res.status(200).json({
-      message: 'API is Working',
-      data: []
+      message: 'API is Working'
     })
   })
   app.route('/login').post(loginHandler);
@@ -24,8 +23,7 @@ const routes = (app: Express) => {
   app.route('/users').get(getUser);
   app.route('*').get((_, res) => {
     res.status(404).json({
-      message: 'Path Not Found',
-      data: []
+      message: 'Path Not Found'
     })
   })
 }
