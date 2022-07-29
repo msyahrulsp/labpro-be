@@ -7,6 +7,7 @@ import { IVerifikasiAkun } from '../interfaces/IVerifikasiAkun';
 import { IHistory } from '../interfaces/IHistory';
 import { isAdmin } from '../middlewares/Token';
 import { User } from '../models/User';
+import { IDRRate } from '../middlewares/Currency';
 
 const verifAkunRepo = database.getRepository(VerifikasiAkun);
 const verifRequestRepo = database.getRepository(History);
@@ -125,8 +126,22 @@ export const putVerifRequest: RequestHandler = async (req, res) => {
     }
     if (isAccepted) {
       const curUser = verifRequest.user;
-      // panggil exchange
-      curUser.saldo += verifRequest.nominal;
+      const rate = await IDRRate(verifRequest.currency);
+      if (rate === null) {
+        res.status(500).json({
+          message: "Failed to get exchange rate",
+        })
+        return;
+      }
+      const newNominal = rate * verifRequest.nominal;
+      if (verifRequest.tipe_util === 'penambahan') {
+        curUser.saldo += newNominal;
+      } else {
+        curUser.saldo -= newNominal;
+        // Asumsi kalau narik uang lebih besar dari
+        // saldo, otomatis uang yang ketarik semua
+        if (curUser.saldo < 0) curUser.saldo = 0; 
+      }
       verifRequest.status = 'accepted';
       await userRepo.save(curUser);
       await verifRequestRepo.save(verifRequest);

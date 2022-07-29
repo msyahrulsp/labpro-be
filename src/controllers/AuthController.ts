@@ -66,7 +66,7 @@ export const registerHandler: RequestHandler = async (req, res) => {
     newUser.username = username;
     newUser.password = hashedPassword;
     newUser.ktp = ktp;
-    newUser.norek = Math.random().toString(36).slice(2,12);
+    newUser.norek = '111'+Math.random().toString().slice(2,9);
     newUser.saldo = 0;
     newUser.created_at = new Date();
     newUser.status_akun = false;
