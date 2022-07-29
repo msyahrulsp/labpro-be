@@ -2,7 +2,7 @@ import { Express } from 'express'
 import { getHistroy } from './controllers/HistoryController';
 import { getAllUser } from './controllers/UserController';
 import { getVerifAkun } from './controllers/VerifikasiAkunController';
-import { loginHandler } from './controllers/AuthController';
+import { loginHandler, registerHandler } from './controllers/AuthController';
 
 const routes = (app: Express) => {
   app.route('/').get((_, res) => {
@@ -12,7 +12,7 @@ const routes = (app: Express) => {
     })
   })
   app.route('/login').post(loginHandler);
-  app.route('/register').post();
+  app.route('/register').post(registerHandler);
   app.route('/transfer').post();
   app.route('/verifikasi/akun').get(getVerifAkun);
   app.route('/verifikasi/request').get(getHistroy);
