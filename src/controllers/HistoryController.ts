@@ -12,7 +12,7 @@ export const getSelfHistory: RequestHandler = async (req, res) => {
   const { username } = req.params;
   // admin gk perlu lha ya buat liat data orang
   if (user !== username) {
-    res.json({
+    res.status(401).json({
       message: "You are not authorized to access this data",
     })
     return;
@@ -32,7 +32,7 @@ export const getSelfHistory: RequestHandler = async (req, res) => {
     }
     res.json(payload);
   } catch (err: any) {
-    res.json({
+    res.status(500).json({
       message: err.message,
     })
   }

@@ -29,7 +29,7 @@ export const getVerifAkun: RequestHandler = async (req, res) => {
     }
     res.json(payload);
   } catch (err: any) {
-    res.json({
+    res.status(500).json({
       message: err.message,
     })
   }
@@ -59,22 +59,16 @@ export const putVerifAkun: RequestHandler = async (req, res) => {
       return;
     }
     const curUser = verifAkun.user;
-    console.log(isAccepted);
     if (isAccepted) {
-      console.log("SUCC")
       curUser.status_akun = true;
       await userRepo.save(curUser);
       await verifAkunRepo.remove(verifAkun);
-      res.json({
-        message: 'SUCCESS'
-      })
     } else {
-      console.log("DELETE")
       await userRepo.remove(curUser);
-      res.json({
-        message: 'SUCCESS'
-      })
     }
+    res.json({
+      message: 'SUCCESS'
+    })
   } catch (err: any) {
     res.status(500).json({
       message: err.message,
@@ -102,7 +96,7 @@ export const getVerifRequest: RequestHandler = async (req, res) => {
     }
     res.json(payload);
   } catch (err: any) {
-    res.json({
+    res.status(500).json({
       message: err.message
     })
   }

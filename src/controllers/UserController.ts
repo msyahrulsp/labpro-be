@@ -9,7 +9,7 @@ const repo = database.getRepository(User);;
 
 export const getUser: RequestHandler = async (req, res) => {
   if (!isAdmin(req.headers.authorization)) {
-    res.json({
+    res.status(403).json({
       message: 'You are not authorized to access this resource'
     })
     return;
@@ -20,15 +20,14 @@ export const getUser: RequestHandler = async (req, res) => {
         role: 'customer'
       }
     });
-    const response: IResponse<IUser[]> = {
+    const payload: IResponse<IUser[]> = {
       message: 'SUCCESS',
       data: users,
     }
-    res.json(response);
+    res.json(payload);
   } catch (err: any) {
-    res.json({
-      message: err.message,
-      data: []
+    res.status(500).json({
+      message: err.message
     })
   }
 }

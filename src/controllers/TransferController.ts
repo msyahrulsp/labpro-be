@@ -11,7 +11,7 @@ export const transferHandler: RequestHandler = async (req, res) => {
   const user = getUsernameFromToken(req.headers.authorization);
   const { username, norek, currency, nominal  } = req.body;
   if (user !== username) {
-    res.json({
+    res.status(400).json({
       message: "You must be logged in to transfer",
     })
     return;
@@ -23,13 +23,13 @@ export const transferHandler: RequestHandler = async (req, res) => {
       }
     })
     if (!userDest) {
-      res.json({
+      res.status(404).json({
         message: "No user found with this account number",
       })
       return;
     }
     if (!userDest.status_akun) {
-      res.json({
+      res.status(401).json({
         message: "User account is not verified",
       })
       return;
@@ -40,7 +40,7 @@ export const transferHandler: RequestHandler = async (req, res) => {
       }
     })
     if (!userSource || !userSource.status_akun) {
-      res.json({
+      res.status(404).json({
         message: "No user found with this username",
       })
       return;
@@ -64,7 +64,7 @@ export const transferHandler: RequestHandler = async (req, res) => {
       message: "SUCCESS",
     })
   } catch (err: any) {
-    res.json({
+    res.status(500).json({
       message: err.message,
     })
   } 

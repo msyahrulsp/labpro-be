@@ -19,13 +19,13 @@ export const loginHandler: RequestHandler = async (req, res) => {
       }
     })
     if (!user || (user && !bcrypt.compareSync(password, user.password))) {
-      res.json({
+      res.status(400).json({
         message: "Username or Password is incorrect",
       })
       return;
     }
     if (!user.status_akun) {
-      res.json({
+      res.status(401).json({
         message: "Account has not been verified",
       })
       return;
@@ -37,7 +37,7 @@ export const loginHandler: RequestHandler = async (req, res) => {
     }
     res.json(payload);
   } catch (err: any) {
-    res.json({
+    res.status(500).json({
       message: err.message,
     })
   }
@@ -52,7 +52,7 @@ export const registerHandler: RequestHandler = async (req, res) => {
       }
     })
     if (user) {
-      res.json({
+      res.status(400).json({
         message: "Username already exists",
       })
       return;
@@ -81,7 +81,7 @@ export const registerHandler: RequestHandler = async (req, res) => {
       message: "SUCCESS",
     })
   } catch (err: any) {
-    res.json({
+    res.status(500).json({
       message: err.message,
     })
   }
