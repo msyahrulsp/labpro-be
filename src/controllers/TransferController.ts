@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { database } from "../database";
 import { User } from "../models/User";
 import { History } from "../models/History";
-import { getUsernameFromToken } from "../middlewares/Token";
+import { getUsernameFromToken, isCustomer } from "../middlewares/Token";
 import { IDRRate } from "../middlewares/Currency";
 import { currencyList } from "../util/symbols";
 
@@ -12,6 +12,12 @@ const historyRepo = database.getRepository(History);
 export const transferHandler: RequestHandler = async (req, res) => {
   const user = getUsernameFromToken(req.headers.authorization);
   const { username, norek, currency, nominal  } = req.body;
+  if (!isCustomer(req.headers.authorization)) {
+    res.status(403).json({
+      message: 'You are not authorized to access this resource'
+    })
+    return;
+  }
   if (user !== username) {
     res.status(400).json({
       message: "You must be logged in to transfer",

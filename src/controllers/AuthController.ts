@@ -4,11 +4,17 @@ import { RequestHandler } from "express";
 import { IResponse } from "../interfaces/IResponse";
 import env from "../env";
 import { VerifikasiAkun } from "../models/VerifikasiAkun";
+import { Not } from "typeorm";
 
 const userRepo = database.getRepository(User);
 const verifRepo = database.getRepository(VerifikasiAkun);
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+
+interface AuthProps {
+  token: string,
+  listRek: string[]
+}
 
 export const loginHandler: RequestHandler = async (req, res) => {
   const { username, password } = req.body;
@@ -30,10 +36,28 @@ export const loginHandler: RequestHandler = async (req, res) => {
       })
       return;
     }
+    const reks = await userRepo.find({
+      select: {
+        norek: true
+      },
+      where: {
+        status_akun: true,
+        username: Not(user.username)
+      }
+    })
     const token = jwt.sign({ user }, env.JWT_SECRET)
-    const payload: IResponse<string> = {
+    const rek = user.role === 'customer' ? (
+      reks.map(({ norek }) => {
+        return norek;
+      })
+    ) : []
+    const resp: AuthProps = {
+      token,
+      listRek: rek
+    }
+    const payload: IResponse<AuthProps> = {
       message: 'SUCCESS',
-      data: token
+      data: resp
     }
     res.json(payload);
   } catch (err: any) {

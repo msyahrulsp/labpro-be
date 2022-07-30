@@ -4,9 +4,12 @@ import {
   Column,
   CreateDateColumn,
   BaseEntity,
-  OneToOne
+  OneToOne,
+  OneToMany,
+  JoinColumn
 } from 'typeorm';
 import { VerifikasiAkun } from './VerifikasiAkun';
+import { History } from './History';
 
 @Entity()
 export class User extends BaseEntity {
@@ -44,5 +47,11 @@ export class User extends BaseEntity {
     () => VerifikasiAkun,
     verifikasi_akun => verifikasi_akun.user
   )
-  verifikasi_akuns: VerifikasiAkun;
+  verifikasi_akun: VerifikasiAkun;
+
+  @OneToMany(
+    () => History,
+    hist => hist.user
+  )
+  history: History[];
 }

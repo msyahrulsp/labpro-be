@@ -1,11 +1,11 @@
-import { History } from '../models/History';
+import { User } from '../models/User';
 import { database } from '../database';
 import { RequestHandler } from 'express';
 import { IResponse } from '../interfaces/IResponse';
 import { IHistory } from '../interfaces/IHistory';
 import { getUsernameFromToken } from '../middlewares/Token';
 
-const repo = database.getRepository(History);
+const repo = database.getRepository(User);
 
 export const getSelfHistory: RequestHandler = async (req, res) => {
   const user = getUsernameFromToken(req.headers.authorization);
@@ -18,17 +18,21 @@ export const getSelfHistory: RequestHandler = async (req, res) => {
     return;
   }
   try {
-    const hist = await repo.find({
-      relations: ['user'],
+    const curUser = await repo.findOne({
+      relations: ['history'],
       where: {
-        user: {
-          username
-        }
+        username
       }
     })
+    if (!curUser) {
+      res.status(404).json({
+        message: 'Specified user not found',
+      })
+      return;
+    }
     const payload: IResponse<IHistory[]> = {
       message: 'SUCCESS',
-      data: hist
+      data: curUser.history
     }
     res.json(payload);
   } catch (err: any) {

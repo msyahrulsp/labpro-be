@@ -15,10 +15,9 @@ export class History {
 
   @ManyToOne(
     () => User,
-    user => user.id_user,
-    { cascade: true }
+    (user: User) => user.history
   )
-  @JoinColumn({ name: 'id_user' })
+  @JoinColumn({ name: "id_user" })
   user: User;
 
   @Column()

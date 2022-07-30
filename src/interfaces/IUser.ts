@@ -1,3 +1,4 @@
+import { IHistory } from "./IHistory";
 import { IVerifikasiAkun } from "./IVerifikasiAkun";
 
 export interface IUser {
@@ -11,5 +12,6 @@ export interface IUser {
   saldo?: number;
   created_at?: Date;
   status_akun?: boolean;
-  verifikasi_akuns?: IVerifikasiAkun;
+  verifikasi_akun?: IVerifikasiAkun;
+  history?: IHistory[];
 }
