@@ -11,7 +11,7 @@ export const getRoleFromToken = (auth: string | undefined) => {
       role = res.user.role ?? "";
     })
   } catch (err: any) {
-    console.log(err.message);
+    // console.log(err.message);
   }
   return role;
 }
@@ -25,7 +25,7 @@ export const getUsernameFromToken = (auth: string | undefined) => {
       username = res.user.username ?? "";
     })
   } catch (err: any) {
-    console.log(err.message);
+    // console.log(err.message);
   }
   return username;
 }

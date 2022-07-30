@@ -12,7 +12,7 @@ export const IDRRate = async (cur: string) => {
   await client.get(cur).then((res: any) => {
     result = res;
   }).catch((err: any) => {
-    console.log(err.message);
+    // console.log(err.message);
   })
   if (result !== null) {
     await client.disconnect();
@@ -31,7 +31,7 @@ export const IDRRate = async (cur: string) => {
     await client.set(cur, res.data.result);
     result = res.data.result;
   }).catch((err: any) => {
-    console.log(err.message);
+    // console.log(err.message);
   });
   await client.disconnect();
   return result;
