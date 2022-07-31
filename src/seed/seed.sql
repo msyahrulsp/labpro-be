@@ -21,7 +21,8 @@ INSERT INTO `bnmo`.`user` (`nama`, `username`, `password`, `role`, `created_at`,
 INSERT INTO `bnmo`.`user` (`nama`, `role`, `username`, `password`, `norek`, `saldo`, `created_at`, `status_akun`)
   VALUES
     ('Bimo','customer','customer','$2a$10$cQIm5VpVrPgjXG6E8lTm3O0tzxOAvJhQRXLGcbDhg4U0daUIsClMu','1111234567',1000000,'2022-07-28 19-00-00',1),
-    ('M Syahrul SP','customer','13520161','$2a$10$nprHYjJ9tmCvmW81jNCpSOr7tC/niA9p06gzjc/LNmsO.P7B9leYe','1117654321',1000000,'2022-07-28 19-00-00',0);
+    ('M Syahrul SP','customer','13520161','$2a$10$nprHYjJ9tmCvmW81jNCpSOr7tC/niA9p06gzjc/LNmsO.P7B9leYe','1117654321',1000000,'2022-07-28 19-00-00',1),
+    ('Piye Kabare','customer','piyekabare', '$2a$10$KOKjzci6oBlnuAPSSHLn1.iJCuXSRIMwJc377P73AJATiP.fqxNe2', '1114285106',200000,'2022-07-28 14-21-32',0);
 
 DROP TABLE IF EXISTS `bnmo`.`history`;
 CREATE TABLE `bnmo`.`history` (
@@ -44,7 +45,7 @@ INSERT INTO `bnmo`.`history` (`id_user`, `tipe_transaksi`, `tipe_util`, `nominal
     (2, 'request', 'penambahan', 100, 'USD', '2022-07-28 19-00-00', 'accepted'),
     (2, 'request', 'pengurangan', 50, 'USD', '2022-07-28 19-00-00', 'pending'),
     (2, 'request', 'penambahan', 2000, 'EUR', '2022-07-28 19-00-00', 'rejected'),
-    (2, 'transfer', '1117654321', 100, 'GBP', '2022-07-29 20-00-00', 'success');
+    (2, 'transfer', 'M Syahrul SP (1117654321)', 100, 'GBP', '2022-07-29 20-00-00', 'success');
 
 DROP TABLE IF EXISTS `bnmo`.`verifikasi_akun`;
 CREATE TABLE `bnmo`.`verifikasi_akun` (
