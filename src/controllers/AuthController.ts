@@ -26,14 +26,20 @@ export const loginHandler: RequestHandler = async (req, res) => {
         username
       }
     })
-    if (!user || (user && !bcrypt.compareSync(password, user.password))) {
+    if (!user) {
+      res.status(404).json({
+        message: "No user found with that username",
+      })
+      return;
+    }
+    if (!bcrypt.compareSync(password, user.password)) {
       res.status(400).json({
         message: "Username or Password is incorrect",
       })
       return;
     }
     if (!user.status_akun) {
-      res.status(401).json({
+      res.status(400).json({
         message: "Account has not been verified",
       })
       return;
