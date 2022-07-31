@@ -16,7 +16,7 @@ CREATE TABLE `bnmo`.`user` (
 );
 
 INSERT INTO `bnmo`.`user` (`nama`, `username`, `password`, `role`, `created_at`, `status_akun`)
-  VALUES (12345,'admin','$2a$10$yxbCU4qZ2g0CX/uRKDvxkuoExx6UQjKf0zDjlDzZAd.IHR6BaBqZy','admin','2022-07-28 19-00-00', 1);
+  VALUES ('Mr Admin','admin','$2a$10$yxbCU4qZ2g0CX/uRKDvxkuoExx6UQjKf0zDjlDzZAd.IHR6BaBqZy','admin','2022-07-28 19-00-00', 1);
 
 INSERT INTO `bnmo`.`user` (`nama`, `role`, `username`, `password`, `norek`, `saldo`, `created_at`, `status_akun`)
   VALUES
