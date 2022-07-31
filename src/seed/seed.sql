@@ -60,4 +60,4 @@ CREATE TABLE `bnmo`.`verifikasi_akun` (
 
 INSERT INTO `bnmo`.`verifikasi_akun` (`id_user`, `created_at`)
   VALUES
-    (3, '2022-07-28 19-00-00');
+    (4, '2022-07-28 14-21-32');
