@@ -5,7 +5,7 @@ import { IResponse } from "../interfaces/IResponse";
 import env from "../env";
 import { VerifikasiAkun } from "../models/VerifikasiAkun";
 import { Not } from "typeorm";
-import { getUsernameFromToken } from "../middlewares/Token";
+import { getUserFromToken, getUsernameFromToken } from "../middlewares/Token";
 
 const userRepo = database.getRepository(User);
 const verifRepo = database.getRepository(VerifikasiAkun);
@@ -13,6 +13,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 interface AuthProps {
+  token?: string,
   user: User,
   listRek: string[]
 }
@@ -37,10 +38,28 @@ export const loginHandler: RequestHandler = async (req, res) => {
       })
       return;
     }
+    const reks = await userRepo.find({
+      select: {
+        norek: true
+      },
+      where: {
+        status_akun: true,
+        username: Not(user.username)
+      }
+    })
+    const rek = user.role === 'customer' ? (
+      reks.map(({ norek }) => {
+        return norek;
+      })
+    ) : []
     const token = jwt.sign({ user }, env.JWT_SECRET)
-    const payload: IResponse<string> = {
+    const payload: IResponse<AuthProps> = {
       message: 'SUCCESS',
-      data: token
+      data: {
+        token,
+        user,
+        listRek: rek
+      }
     }
     res.json(payload);
   } catch (err: any) {
@@ -51,25 +70,14 @@ export const loginHandler: RequestHandler = async (req, res) => {
 }
 
 export const userDataHandler: RequestHandler = async (req, res) => {
-  const username = getUsernameFromToken(req.headers.authorization);
-  if (!username) {
-    res.status(401).json({
-      message: "You are not authorized to access this resource"
+  const user = getUserFromToken(req.headers.authorization);
+  if (!user) {
+    res.status(400).json({
+      message: "Invalid token"
     })
     return;
   }
   try {
-    const user = await userRepo.findOne({
-      where: {
-        username
-      }
-    })
-    if (!user) {
-      res.status(404).json({
-        message: "User not found"
-      })
-      return;
-    }
     const reks = await userRepo.find({
       select: {
         norek: true

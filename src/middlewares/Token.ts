@@ -2,6 +2,21 @@ import env from "../env";
 
 const jwt = require("jsonwebtoken");
 
+export const getUserFromToken = (auth: string | undefined) => {
+  if (!auth) {
+    return undefined;
+  }
+  let decoded = null;
+  const token = auth.split(" ")[1];
+  try {
+    decoded = jwt.verify(token, env.JWT_SECRET);
+    decoded = decoded.user;
+  } catch {
+
+  }
+  return decoded;
+}
+
 export const getRoleFromToken = (auth: string | undefined) => {
   if (!auth) return ""; 
   let role = "";
