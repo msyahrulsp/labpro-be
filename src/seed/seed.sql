@@ -22,7 +22,7 @@ INSERT INTO `bnmo`.`user` (`nama`, `role`, `username`, `password`, `norek`, `sal
   VALUES
     ('Bimo','customer','customer','$2a$10$cQIm5VpVrPgjXG6E8lTm3O0tzxOAvJhQRXLGcbDhg4U0daUIsClMu','1111234567',1000000,'2022-07-28 19-00-00',1),
     ('M Syahrul SP','customer','13520161','$2a$10$nprHYjJ9tmCvmW81jNCpSOr7tC/niA9p06gzjc/LNmsO.P7B9leYe','1117654321',1000000,'2022-07-28 19-00-00',1),
-    ('Piye Kabare','customer','piyekabare', '$2a$10$KOKjzci6oBlnuAPSSHLn1.iJCuXSRIMwJc377P73AJATiP.fqxNe2', '1114285106',200000,'2022-07-28 14-21-32',0);
+    ('Piye Kabare','customer','piyekabare', '$2a$10$KOKjzci6oBlnuAPSSHLn1.iJCuXSRIMwJc377P73AJATiP.fqxNe2', '1114285106',0,'2022-07-28 14-21-32',0);
 
 DROP TABLE IF EXISTS `bnmo`.`history`;
 CREATE TABLE `bnmo`.`history` (
