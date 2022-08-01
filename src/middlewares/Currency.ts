@@ -2,7 +2,12 @@ import env from '../env';
 
 const axios = require('axios');
 const redis = require('redis');
-const client = redis.createClient({ url: 'redis://redis:6379' });
+const client = redis.createClient({ 
+  url: 'redis://redis:6379',
+  host: env.REDIS_HOST || 'localhost',
+  password: env.REDIS_PASSWORD || '',
+  port: env.REDIS_PORT || 6379
+});
 
 export const IDRRate = async (cur: string) => {
   await client.connect();
