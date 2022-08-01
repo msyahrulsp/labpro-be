@@ -11,6 +11,7 @@ export default {
   JWT_SECRET: process.env.JWT_SECRET,
   EXCHANGE_RATE_API: process.env.EXCHANGE_RATE_API,
   EXCHANGE_RATE_API_KEY: process.env.EXCHANGE_RATE_API_KEY,
+  REDIS_URL: process.env.REDIS_URL,
   REDIS_HOST: process.env.REDIS_HOST,
   REDIS_PORT: process.env.REDIS_PORT,
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,

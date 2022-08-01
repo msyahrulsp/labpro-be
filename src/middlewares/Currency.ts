@@ -3,11 +3,12 @@ import env from '../env';
 const axios = require('axios');
 const redis = require('redis');
 const client = redis.createClient({
+  url: env.REDIS_URL || '',
   socket: {
-    host: env.REDIS_HOST,
-    port: env.REDIS_PORT,
+    host: env.REDIS_HOST || 'localhost',
+    port: env.REDIS_PORT || 6379,
   },
-  password: env.REDIS_PASSWORD,
+  password: env.REDIS_PASSWORD || '',
 });
 
 export const IDRRate = async (cur: string) => {
