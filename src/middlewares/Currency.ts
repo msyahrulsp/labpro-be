@@ -5,12 +5,12 @@ const redis = require('redis');
 const client = redis.createClient({ 
   url: 'redis://redis:6379',
   host: env.REDIS_HOST || 'localhost',
-  port: env.REDIS_PORT || 6379
+  port: env.REDIS_PORT || 6379,
+  password: env.REDIS_PASSWORD || ''
 });
-client.auth(env.REDIS_PASSWORD || '');
 
 export const IDRRate = async (cur: string) => {
-  // await client.connect();
+  await client.connect();
   // Dark Magic
   let result = null;
 
@@ -20,7 +20,7 @@ export const IDRRate = async (cur: string) => {
     // console.log(err.message);
   })
   if (result !== null) {
-    // await client.disconnect();
+    await client.disconnect();
     return result;
   }
 
@@ -38,6 +38,6 @@ export const IDRRate = async (cur: string) => {
   }).catch((err: any) => {
     // console.log(err.message);
   });
-  // await client.disconnect();
+  await client.disconnect();
   return result;
 }
