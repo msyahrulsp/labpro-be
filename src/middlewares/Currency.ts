@@ -3,7 +3,7 @@ import env from '../env';
 const axios = require('axios');
 const redis = require('redis');
 const client = redis.createClient({ 
-  url: 'redis://redis:6379',
+  // url: 'redis://redis:6379',
   host: env.REDIS_HOST || 'localhost',
   port: env.REDIS_PORT || 6379,
   password: env.REDIS_PASSWORD || ''
