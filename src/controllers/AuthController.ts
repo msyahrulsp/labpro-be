@@ -11,12 +11,24 @@ const userRepo = database.getRepository(User);
 const verifRepo = database.getRepository(VerifikasiAkun);
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const fs = require("fs");
 
 interface AuthProps {
   token?: string,
   user: User,
   listRek: string[]
 }
+
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: (req: any, file: any, cb: any) => {
+    cb(null, './public/uploads/');
+  },
+  filename: (req: any, file: any, cb: any) => {
+    cb(null, file.originalname);
+  }
+})
+const upload = multer({ storage: storage });
 
 export const loginHandler: RequestHandler = async (req, res) => {
   const { username, password } = req.body;
@@ -114,7 +126,7 @@ export const userDataHandler: RequestHandler = async (req, res) => {
 }
 
 export const registerHandler: RequestHandler = async (req, res) => {
-  const { nama, username, password, ktp } = req.body;
+  const { nama, username, password, ktp_name } = req.body;
   try {
     const user = await userRepo.findOne({
       where: {
@@ -135,7 +147,7 @@ export const registerHandler: RequestHandler = async (req, res) => {
     newUser.role = 'customer';
     newUser.username = username;
     newUser.password = hashedPassword;
-    newUser.ktp = ktp;
+    newUser.ktp = ktp_name;
     newUser.norek = '111'+Math.random().toString().slice(2,9);
     newUser.saldo = 0;
     newUser.created_at = new Date();

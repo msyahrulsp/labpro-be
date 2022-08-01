@@ -5,6 +5,19 @@ import { getUser } from './controllers/UserController';
 import { getSelfHistory } from './controllers/HistoryController';
 import { transferHandler } from './controllers/TransferController';
 
+// Black magic
+const multer = require('multer');
+const path = require('path');
+const storage = multer.diskStorage({
+  destination: (req: any, file: any, cb: any) => {
+    cb(null, './public/images');
+  },
+  filename: (req: any, file: any, cb: any) => {
+    cb(null, req.body.username + path.extname(file.originalname));
+  }
+})
+const upload = multer({ storage: storage });
+
 const routes = (app: Express) => {
   app.route('/').get((_, res) => {
     res.status(200).json({
@@ -13,7 +26,7 @@ const routes = (app: Express) => {
   })
   app.route('/login').post(loginHandler);
   app.route('/login').get(userDataHandler);
-  app.route('/register').post(registerHandler);
+  app.route('/register').post(upload.single('ktp'), registerHandler);
   app.route('/transfer').post(transferHandler);
   app.route('/verification/accounts').get(getVerifAkun);
   app.route('/verification/accounts').put(putVerifAkun);
