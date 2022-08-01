@@ -2,11 +2,12 @@ import env from '../env';
 
 const axios = require('axios');
 const redis = require('redis');
-const client = redis.createClient({ 
-  // url: 'redis://redis:6379',
-  host: env.REDIS_HOST || 'localhost',
-  port: env.REDIS_PORT || 6379,
-  password: env.REDIS_PASSWORD || ''
+const client = redis.createClient({
+  socket: {
+    host: env.REDIS_HOST,
+    port: env.REDIS_PORT,
+  },
+  password: env.REDIS_PASSWORD,
 });
 
 export const IDRRate = async (cur: string) => {
@@ -33,8 +34,8 @@ export const IDRRate = async (cur: string) => {
         amount: 1,
       }}
   ).then(async (res: any) => {
-    await client.set(cur, res.data.result);
     result = res.data.result;
+    await client.set(cur, result);
   }).catch((err: any) => {
     // console.log(err.message);
   });
