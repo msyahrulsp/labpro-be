@@ -5,12 +5,9 @@ const redis = require('redis');
 const client = redis.createClient({ 
   url: 'redis://redis:6379',
   host: env.REDIS_HOST || 'localhost',
-  password: env.REDIS_PASSWORD || '',
   port: env.REDIS_PORT || 6379
 });
-client.on('connect', () => {
-  console.log('Redis client connected');
-})
+client.auth(env.REDIS_PASSWORD || '');
 
 export const IDRRate = async (cur: string) => {
   // await client.connect();
