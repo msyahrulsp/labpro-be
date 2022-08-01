@@ -5,30 +5,19 @@ import { IResponse } from "../interfaces/IResponse";
 import env from "../env";
 import { VerifikasiAkun } from "../models/VerifikasiAkun";
 import { Not } from "typeorm";
-import { getUserFromToken, getUsernameFromToken } from "../middlewares/Token";
+import { getUserFromToken } from "../middlewares/Token";
 
 const userRepo = database.getRepository(User);
 const verifRepo = database.getRepository(VerifikasiAkun);
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const fs = require("fs");
+const fs = require('fs');
 
 interface AuthProps {
   token?: string,
   user: User,
   listRek: string[]
 }
-
-const multer = require('multer');
-const storage = multer.diskStorage({
-  destination: (req: any, file: any, cb: any) => {
-    cb(null, './public/uploads/');
-  },
-  filename: (req: any, file: any, cb: any) => {
-    cb(null, file.originalname);
-  }
-})
-const upload = multer({ storage: storage });
 
 export const loginHandler: RequestHandler = async (req, res) => {
   const { username, password } = req.body;
@@ -126,7 +115,17 @@ export const userDataHandler: RequestHandler = async (req, res) => {
 }
 
 export const registerHandler: RequestHandler = async (req, res) => {
-  const { nama, username, password, ktp_name } = req.body;
+  const imageList: string[] = fs.readdirSync('./public/images');
+  let existImage: boolean = false;
+  let imageIdx: number = -1;
+  for (let i = 0; i < imageList.length; i++) {
+    if (imageList[i].includes(req.body.username)) {
+      existImage = true;
+      imageIdx = i;
+      break;
+    }
+  }
+  const { nama, username, password } = req.body;
   try {
     const user = await userRepo.findOne({
       where: {
@@ -139,6 +138,12 @@ export const registerHandler: RequestHandler = async (req, res) => {
       })
       return;
     }
+    if (!existImage) {
+      res.status(400).json({
+        message: "KTP can only be .jpg, .jpeg, or .png and a maximum size of 2MB"
+      })
+      return;
+    }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -147,7 +152,7 @@ export const registerHandler: RequestHandler = async (req, res) => {
     newUser.role = 'customer';
     newUser.username = username;
     newUser.password = hashedPassword;
-    newUser.ktp = ktp_name;
+    newUser.ktp = imageList[imageIdx];
     newUser.norek = '111'+Math.random().toString().slice(2,9);
     newUser.saldo = 0;
     newUser.created_at = new Date();
