@@ -8,7 +8,7 @@ import { transferHandler } from './controllers/TransferController';
 // Black magic
 const multer = require('multer');
 const path = require('path');
-const validExt: string[] = ['.jpg', '.jpeg', 'png'];
+const validExt: string[] = ['.jpg', '.jpeg', '.png'];
 const fileFilter = (req: any, file: any, cb: any) => {
   const fileSize = parseInt(req.headers["content-length"]);
   if (validExt.indexOf(path.extname(file.originalname)) === -1) {
