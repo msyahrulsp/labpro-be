@@ -3,7 +3,7 @@ import { database } from '../database';
 import { RequestHandler } from 'express';
 import { IResponse } from '../interfaces/IResponse';
 import { IUser } from '../interfaces/IUser';
-import { isAdmin } from '../middlewares/Token';
+import { isAdmin } from '../util/token';
 
 const repo = database.getRepository(User);;
 

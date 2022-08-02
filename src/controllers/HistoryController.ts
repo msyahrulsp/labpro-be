@@ -3,7 +3,7 @@ import { database } from '../database';
 import { RequestHandler } from 'express';
 import { IResponse } from '../interfaces/IResponse';
 import { IHistory } from '../interfaces/IHistory';
-import { getUsernameFromToken } from '../middlewares/Token';
+import { getUsernameFromToken } from '../util/token';
 
 const repo = database.getRepository(User);
 

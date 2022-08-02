@@ -2,8 +2,8 @@ import { RequestHandler } from "express";
 import { database } from "../database";
 import { User } from "../models/User";
 import { History } from "../models/History";
-import { getUsernameFromToken, isCustomer } from "../middlewares/Token";
-import { IDRRate } from "../middlewares/Currency";
+import { getUsernameFromToken, isCustomer } from "../util/token";
+import { IDRRate } from "../util/currency";
 import { currencyList } from "../util/symbols";
 
 const userRepo = database.getRepository(User);

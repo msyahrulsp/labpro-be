@@ -5,7 +5,8 @@ import { IResponse } from "../interfaces/IResponse";
 import env from "../env";
 import { VerifikasiAkun } from "../models/VerifikasiAkun";
 import { Not } from "typeorm";
-import { getUserFromToken } from "../middlewares/Token";
+import { getUserFromToken } from "../util/token";
+import { uploadToGoogleDrive } from "../services/drive";
 
 const userRepo = database.getRepository(User);
 const verifRepo = database.getRepository(VerifikasiAkun);
@@ -114,16 +115,12 @@ export const userDataHandler: RequestHandler = async (req, res) => {
   } 
 }
 
-export const registerHandler: RequestHandler = async (req, res) => {
-  const imageList: string[] = fs.readdirSync('./public/images');
-  let existImage: boolean = false;
-  let imageIdx: number = -1;
-  for (let i = 0; i < imageList.length; i++) {
-    if (imageList[i].includes(req.body.username)) {
-      existImage = true;
-      imageIdx = i;
-      break;
-    }
+export const registerHandler = async (req: any, res: any) => {
+  if (!req.file) {
+    res.status(400).json({
+      message: "File must be a .jpg, .jpeg, or .png and must be less than 5MB"
+    })
+    return;
   }
   const { nama, username, password } = req.body;
   try {
@@ -138,12 +135,7 @@ export const registerHandler: RequestHandler = async (req, res) => {
       })
       return;
     }
-    if (!existImage) {
-      res.status(400).json({
-        message: "KTP can only be .jpg, .jpeg, or .png and a maximum size of 2MB"
-      })
-      return;
-    }
+    const driveRes = await uploadToGoogleDrive(req.file, username);
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -152,7 +144,7 @@ export const registerHandler: RequestHandler = async (req, res) => {
     newUser.role = 'customer';
     newUser.username = username;
     newUser.password = hashedPassword;
-    newUser.ktp = imageList[imageIdx];
+    newUser.ktp = driveRes.data.id ?? "";
     newUser.norek = '111'+Math.random().toString().slice(2,9);
     newUser.saldo = 0;
     newUser.created_at = new Date();

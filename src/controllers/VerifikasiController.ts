@@ -4,10 +4,10 @@ import { database } from '../database';
 import { RequestHandler } from 'express';
 import { IResponse } from '../interfaces/IResponse';
 import { IVerifikasiAkun } from '../interfaces/IVerifikasiAkun';
-import { getUsernameFromToken, isAdmin, isCustomer } from '../middlewares/Token';
+import { getUsernameFromToken, isAdmin, isCustomer } from '../util/token';
 import { User } from '../models/User';
 import { IUser } from '../interfaces/IUser';
-import { IDRRate } from '../middlewares/Currency';
+import { IDRRate } from '../util/currency';
 
 const verifAkunRepo = database.getRepository(VerifikasiAkun);
 const verifRequestRepo = database.getRepository(History);

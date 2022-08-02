@@ -20,9 +20,9 @@ INSERT INTO `bnmo`.`user` (`nama`, `username`, `password`, `role`, `created_at`,
 
 INSERT INTO `bnmo`.`user` (`nama`, `role`, `username`, `password`, `ktp`, `norek`, `saldo`, `created_at`, `status_akun`)
   VALUES
-    ('Bimo','customer','customer','$2a$10$cQIm5VpVrPgjXG6E8lTm3O0tzxOAvJhQRXLGcbDhg4U0daUIsClMu',NULL,'1111234567',1000000,'2022-07-28 19-00-00',1),
-    ('M Syahrul SP','customer','13520161','$2a$10$nprHYjJ9tmCvmW81jNCpSOr7tC/niA9p06gzjc/LNmsO.P7B9leYe','13520161.jpg','1117654321',1000000,'2022-07-28 19-00-00',1),
-    ('Piye Kabare','customer','piyekabare', '$2a$10$KOKjzci6oBlnuAPSSHLn1.iJCuXSRIMwJc377P73AJATiP.fqxNe2','piyekabare.png','1114285106',0,'2022-07-28 14-21-32',0);
+    ('Bimo','customer','customer','$2a$10$cQIm5VpVrPgjXG6E8lTm3O0tzxOAvJhQRXLGcbDhg4U0daUIsClMu','1BloPl05IrHqYbSMBR39UNRkVuu-siA6X','1111234567',1000000,'2022-07-28 19-00-00',1),
+    ('M Syahrul SP','customer','13520161','$2a$10$nprHYjJ9tmCvmW81jNCpSOr7tC/niA9p06gzjc/LNmsO.P7B9leYe','1U5VCE18aOgU8LoVClhRGekyqHtI04bCw','1117654321',1000000,'2022-07-28 19-00-00',1),
+    ('Piye Kabare','customer','piyekabare', '$2a$10$KOKjzci6oBlnuAPSSHLn1.iJCuXSRIMwJc377P73AJATiP.fqxNe2','1fVejGT1vsBY5gI2SIzLCwJufCunWFSAb','1114285106',0,'2022-07-28 14-21-32',0);
 
 DROP TABLE IF EXISTS `bnmo`.`history`;
 CREATE TABLE `bnmo`.`history` (
