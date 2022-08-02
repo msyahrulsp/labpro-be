@@ -41,7 +41,7 @@ export const loginHandler: RequestHandler = async (req, res) => {
       return;
     }
     if (!user.status_akun) {
-      res.status(400).json({
+      res.status(401).json({
         message: "Account has not been verified",
       })
       return;
