@@ -36,8 +36,6 @@ Silahkan pilih metode yang ingin digunakan. Menjalankan sepenuhnya secara lokal 
 - Jalankan perintah `npm run dev`
 - Backend akan berjalan di http://localhost:5000 dengan database dan redis yang telah di deploy
 
-## Run with Docker
-
 ## API Endpoint
 
 | Endpoint                | Method    | Access          |
