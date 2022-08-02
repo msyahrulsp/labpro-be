@@ -4,7 +4,7 @@ const fs = require('fs');
 
 export const uploadToGoogleDrive = async (file: any, username: string) => {
   const auth = new google.auth.GoogleAuth({
-    keyFile: `${__dirname}/drive-service-key.json`,
+    keyFile: `./drive-service-key.json`,
     scopes: "https://www.googleapis.com/auth/drive",
   });
   const fileMetadata = {
