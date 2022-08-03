@@ -16,6 +16,7 @@ npm install
 
 ## How to Use
 Silahkan pilih metode yang ingin digunakan. Menjalankan sepenuhnya secara lokal menggunakan docker. Ataupun menjalankan secara lokal, tetapi terhubung dengan database dan redis yang telah di deploy
+> File drive-service-key.json diperlukan jika ingin menjalankan secara lokal. Kontak saya via [Line](https://line.me/ti/p/~bbolt2002) untuk mendapatkannya. Terima kasih :D
 ### Run with Docker
 - Ubah file .env.development menjadi .env
 - Isi field yang kosong dengan ketentuan berikut
@@ -32,6 +33,7 @@ Silahkan pilih metode yang ingin digunakan. Menjalankan sepenuhnya secara lokal 
 ### Connect to Deployed Database and redis
 - Ubah file .env.production menjadi .env
 - Isi `JWT_SECRET` dengan karakter random sesuai dengan keinginan
+- `REDIS_PASSWORD` perlu mengontak saya via [Line](https://line.me/ti/p/~bbolt2002)
 - Jalankan perintah `npm run dev`
 - Backend akan berjalan di http://localhost:5000 dengan database dan redis yang telah di deploy
 
