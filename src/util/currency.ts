@@ -1,19 +1,10 @@
 import env from '../env';
+import { client } from '../services/redis';
 
 const axios = require('axios');
-const redis = require('redis');
-const client = redis.createClient({
-  url: env.REDIS_URL || '',
-  socket: {
-    host: env.REDIS_HOST || 'localhost',
-    port: env.REDIS_PORT || 6379,
-  },
-  password: env.REDIS_PASSWORD || '',
-});
 
 export const IDRRate = async (cur: string) => {
   await client.connect();
-  // Dark Magic
   let result = null;
 
   await client.get(cur).then((res: any) => {

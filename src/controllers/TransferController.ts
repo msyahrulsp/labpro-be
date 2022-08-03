@@ -30,6 +30,12 @@ export const transferHandler: RequestHandler = async (req, res) => {
     })
     return;
   }
+  if (nominal <= 0) {
+    res.status(400).json({
+      message: "Invalid nominal",
+    })
+    return;
+  }
   try {
     const userDest = await userRepo.findOne({
       where: {

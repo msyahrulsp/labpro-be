@@ -118,6 +118,12 @@ export const postVerifRequest: RequestHandler = async (req, res) => {
     })
     return;
   }
+  if (nominal <= 0) {
+    res.status(400).json({
+      message: "Invalid nominal",
+    })
+    return;
+  }
   try {
     const usr = await userRepo.findOne({
       where: {

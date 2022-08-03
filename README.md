@@ -19,8 +19,7 @@ Silahkan pilih metode yang ingin digunakan. Menjalankan sepenuhnya secara lokal 
 ### Run with Docker
 - Ubah file .env.development menjadi .env
 - Isi field yang kosong dengan ketentuan berikut
-  - `DATABASE_USERNAME`: Isi dengan username MySQL/MariaDB
-  - `DATABASE_PASSWORD`: Isi dengan password username yang telah diisi
+  - `DATABASE_PASSWORD`: Isi dengan password root MySQL/MariaDB
   - `DATABASE_HOST`: Isi dengan IP dari container docker<br>
     * Cara mendapatkan IP terkait ialah dengan menjalankan perintah `cd ~ | cat /etc/resolv.conf` pada terminal
     * Jalankan di [WSL](https://docs.microsoft.com/en-us/windows/wsl/install) jika menggunakan Windows
